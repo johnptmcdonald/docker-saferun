@@ -30,13 +30,17 @@ app.post('/', (req, res, next) => {
 	console.log('recd!')
 
     let exec = require('child_process').exec;
+    // let exec = require('child_process').exec;
     let fs = require('fs');
 
-	exec(`docker run --rm --stop-timeout 3 -e CODE="${req.body.code}" virtual_machine`, (err, stdout, stderr) => {
-		console.log('err:', err)
-		console.log('stdout:', stdout)
-		console.log('stderr:', stderr)
-		res.send(stdout)
+	exec(`docker run -d --rm --stop-timeout 13 -e CODE="${req.body.code}" virtual_machine`, (err, stdout, stderr) => {
+		console.log(err, stdout, stderr)
+		console.log(`docker logs ${stdout.split('\n')[0]}`)
+		exec(`docker logs -f ${stdout.split('\n')[0]} > ${stdout.split('\n')[0]}.txt`)
+		// exec(`docker logs ${stdout}`, (err2, stdout2, stderr2) => {
+		
+			res.send('ok')
+		// })
 	})
     
 })
